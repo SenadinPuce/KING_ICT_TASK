@@ -1,4 +1,5 @@
 ﻿using Microsoft.OpenApi.Models;
+using System.Reflection;
 
 namespace API.Extensions
 {
@@ -8,8 +9,23 @@ namespace API.Extensions
 		{
 			// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 			services.AddEndpointsApiExplorer();
+
 			services.AddSwaggerGen(c =>
 			{
+				var info = new OpenApiInfo()
+				{
+					Title = "API Documentation",
+					Version = "v1",
+					Description = "Description of API",
+					Contact = new OpenApiContact()
+					{
+						Name = "Senadin Puce",
+						Email = "senadin.puce@gmail.com",
+					}
+				};
+
+				c.SwaggerDoc("v1", info);
+
 				var securitySchema = new OpenApiSecurityScheme
 				{
 					Name = "JWT Authentication",
@@ -36,6 +52,10 @@ namespace API.Extensions
 
 				c.AddSecurityRequirement(securityRequirement);
 
+			
+				var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+				var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+				c.IncludeXmlComments(xmlPath);
 			});
 
 			return services;
@@ -43,8 +63,16 @@ namespace API.Extensions
 
 		public static IApplicationBuilder UseSwaggerDocumentation(this IApplicationBuilder app)
 		{
-			app.UseSwagger();
-			app.UseSwaggerUI();
+			app.UseSwagger(u =>
+			{
+				u.RouteTemplate = "swagger/{documentName}/swagger.json";
+			});
+
+			app.UseSwaggerUI(c =>
+			{
+				c.RoutePrefix = "swagger";
+				c.SwaggerEndpoint(url: "/swagger/v1/swagger.json", name: "KING ICT TASK");
+			});
 
 			return app;
 		}

@@ -14,6 +14,17 @@ namespace API.Controllers
 		}
 
 
+
+		/// <summary>
+		/// Logs in a user.
+		/// </summary>
+		/// <remarks>
+		/// Access: Accessible by anonymous users. This endpoint is used for logging in a user with a username and password.
+		/// </remarks>
+		/// <param name="login">The login credentials (username and password).</param>
+		/// <returns>A UserDto containing the username, email, and JWT token.</returns>
+		/// <response code="200">Returns the UserDto with the username, email, and token</response>
+		/// <response code="401">If the login credentials are invalid</response>
 		[HttpPost("login")]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status401Unauthorized)]

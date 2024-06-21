@@ -20,9 +20,18 @@ namespace API.Controllers
 			_productService = creator.Create();
 		}
 
-		// The authorization attribute and policy below are added for testing purposes only. 
-		// Only users with role 'admin' can access this endpoint
-
+		/// <summary>
+		/// Gets a product by its ID.
+		/// </summary>
+		/// <remarks>
+		/// Access: Only accessible by users with the 'admin' role.
+		/// </remarks>
+		/// <param name="id">The ID of the product.</param>
+		/// <returns>A product DTO.</returns>
+		/// <response code="200">Returns the product</response>
+		/// <response code="401">If the user is unauthorized</response>
+		/// <response code="403">If the user is forbidden</response>
+		/// <response code="404">If the product is not found</response>
 		[Cached(600)]
 		[Authorize(Policy = "Admin")] 
 		[HttpGet("{id}")]
@@ -40,8 +49,18 @@ namespace API.Controllers
 			return Ok(product);
 		}
 
-		// The authorization attribute below is added for testing purposes only.
-		// Only authenticated users can access this endpoint
+
+		/// <summary>
+		/// Gets a list of products.
+		/// </summary>
+		/// <remarks>
+		/// Access: Only accessible by authenticated users.
+		/// </remarks>
+		/// <param name="search">The search parameters.</param>
+		/// <returns>A list of products.</returns>
+		/// <response code="200">Returns the list of products</response>
+		/// <response code="401">If the user is unauthorized</response>
+		/// <response code="404">If no products are found</response>
 		[Cached(600)]
 		[Authorize] 
 		[HttpGet]
@@ -57,6 +76,18 @@ namespace API.Controllers
 			return Ok(products);
 		}
 
+
+
+		/// <summary>
+		/// Searches products by name.
+		/// </summary>
+		/// <remarks>
+		/// Access: Accessible by all users.
+		/// </remarks>
+		/// <param name="search">The search parameters.</param>
+		/// <returns>A list of products.</returns>
+		/// <response code="200">Returns the list of products</response>
+		/// <response code="404">If no products are found</response>	
 		[Cached(600)]
 		[AllowAnonymous]
 		[ProducesResponseType(StatusCodes.Status200OK)]
@@ -71,10 +102,23 @@ namespace API.Controllers
 			return Ok(products);
 		}
 
+
+
+		/// <summary>
+		/// Filters products by category and price.
+		/// </summary>
+		/// <remarks>
+		/// Access: Accessible by all users, including anonymous users.
+		/// </remarks>
+		/// <param name="search">The search parameters.</param>
+		/// <returns>A list of products.</returns>
+		/// <response code="200">Returns the list of products</response>
+		/// <response code="404">If no products are found</response>
 		[Cached(600)]
 		[AllowAnonymous]
 		[HttpGet("category")]
 		[ProducesResponseType(StatusCodes.Status200OK)]
+		[ProducesResponseType(StatusCodes.Status400BadRequest)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
 		public async Task<ActionResult<PagedResult<ProductDto>>> GetByCategory([FromQuery] ProductCategoryAndPriceSearchObject search)
 		{
