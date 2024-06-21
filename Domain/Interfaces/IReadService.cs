@@ -1,10 +1,11 @@
+using Domain.DTOs;
 using Domain.SearchObjects;
 
 namespace Domain.Interfaces
 {
-    public interface IReadService<TDb, TSearch> where TDb : class where TSearch : BaseSearchObject
+    public interface IReadService<TEntity, TDto, TSearch> where TEntity : class where TDto : class where TSearch : BaseSearchObject
     {
-        Task<IReadOnlyList<TDb>> GetListAsync(TSearch search);
-        Task<TDb> GetByIdAsync(int id);
+		Task<PagedResult<TDto>?> GetListAsync(TSearch search);
+        Task<TDto?> GetByIdAsync(int id);
     }
 }
