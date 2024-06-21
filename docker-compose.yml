@@ -1,15 +1,20 @@
+version: "3"
 services:
-
   redis:
     image: redis:latest
+    container_name: redis
+    restart: unless-stopped
     ports:
       - 6379:6379
     command: ["redis-server", "--appendonly", "yes"]
     volumes:
       - redis-data:/data
+    networks:
+      - king_ict_task
 
   redis-commander:
     image: rediscommander/redis-commander:latest
+    container_name: rediscommander
     environment:
       - REDIS_HOSTS=local:redis:6379
       - HTTP_USER=root
@@ -18,6 +23,27 @@ services:
       - 8081:8081
     depends_on:
       - redis
+    networks:
+      - king_ict_task
+
+  api:
+    restart: unless-stopped
+    build:
+      context: .
+      dockerfile: API\Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - Redis=redis:6379 
+    ports:
+     - "8080:8080"
+    networks:
+      - king_ict_task
+    depends_on:
+      - redis
  
 volumes:
   redis-data:
+  
+networks:
+    king_ict_task:
+        driver: bridge

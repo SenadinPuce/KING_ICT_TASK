@@ -4,7 +4,7 @@ using System.Text;
 
 namespace API.Extensions
 {
-	public static class IdentityServicesExtensions
+    public static class IdentityServicesExtensions
 	{
 		private static readonly string _keySecret = Environment.GetEnvironmentVariable("TokenKey")
 		?? "super secret key added for testing purpose, one must NOT use it in production!";

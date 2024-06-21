@@ -5,7 +5,7 @@ using System.Text;
 
 namespace API.Helpers
 {
-	public class CachedAttribute : Attribute, IAsyncActionFilter
+    public class CachedAttribute : Attribute, IAsyncActionFilter
 	{
 		private readonly int _timeToLiveSeconds;
 		public CachedAttribute(int timeToLiveSeconds)

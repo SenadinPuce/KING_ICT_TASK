@@ -11,9 +11,6 @@ namespace Infrastructure.Services
 	public class WebApiProductService(HttpClient httpClient, IMapper mapper) 
 		: WebApiReadService<Product, ProductDto, BaseSearchObject>(httpClient, mapper, endpoint: "products"), IProductService
 	{
-		private readonly HttpClient _httpClient = httpClient;
-		private readonly IMapper _mapper = mapper;
-
 		private async Task<List<Product>?> FetchAllProductsAsync(string apiUrl)
 		{
 			var response = await _httpClient.GetAsync(apiUrl);
