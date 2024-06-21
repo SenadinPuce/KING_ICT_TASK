@@ -12,8 +12,8 @@ namespace Infrastructure.Services
 		protected readonly string _baseUrl = Environment.GetEnvironmentVariable("baseUrl") ?? "https://dummyjson.com/";
 		protected readonly string _endpoint;
 
-		private readonly HttpClient _httpClient;
-		private readonly IMapper _mapper;
+		protected readonly HttpClient _httpClient;
+		protected readonly IMapper _mapper;
 
 		protected WebApiReadService(HttpClient httpClient, IMapper mapper, string endpoint)
 		{

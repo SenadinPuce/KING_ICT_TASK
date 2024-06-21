@@ -4,6 +4,7 @@ using Domain.DTOs;
 using Domain.Interfaces;
 using Domain.SearchObjects;
 using Infrastructure.Helpers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
@@ -19,8 +20,16 @@ namespace API.Controllers
 			_productService = creator.Create();
 		}
 
+		// The authorization attribute and policy below are added for testing purposes only. 
+		// Only users with role 'admin' can access this endpoint
+
 		[Cached(600)]
+		[Authorize(Policy = "Admin")] 
 		[HttpGet("{id}")]
+		[ProducesResponseType(StatusCodes.Status200OK)]
+		[ProducesResponseType(StatusCodes.Status401Unauthorized)]
+		[ProducesResponseType(StatusCodes.Status403Forbidden)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
 		public async Task<ActionResult<ProductDto>> GetById(int id)
 		{
 
@@ -31,8 +40,14 @@ namespace API.Controllers
 			return Ok(product);
 		}
 
+		// The authorization attribute below is added for testing purposes only.
+		// Only authenticated users can access this endpoint
 		[Cached(600)]
+		[Authorize] 
 		[HttpGet]
+		[ProducesResponseType(StatusCodes.Status200OK)]
+		[ProducesResponseType(StatusCodes.Status401Unauthorized)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
 		public async Task<ActionResult<PagedResult<ProductDto>>> Get([FromQuery] BaseSearchObject search)
 		{
 			var products = await _productService.GetListAsync(search);
@@ -43,6 +58,9 @@ namespace API.Controllers
 		}
 
 		[Cached(600)]
+		[AllowAnonymous]
+		[ProducesResponseType(StatusCodes.Status200OK)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
 		[HttpGet("search")]
 		public async Task<ActionResult<PagedResult<ProductDto>>> GetByName([FromQuery] ProductNameSearchObject search)
 		{
@@ -54,11 +72,12 @@ namespace API.Controllers
 		}
 
 		[Cached(600)]
+		[AllowAnonymous]
 		[HttpGet("category")]
+		[ProducesResponseType(StatusCodes.Status200OK)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
 		public async Task<ActionResult<PagedResult<ProductDto>>> GetByCategory([FromQuery] ProductCategoryAndPriceSearchObject search)
 		{
-			if (string.IsNullOrEmpty(search.Category)) return BadRequest();
-
 			var products = await _productService.GetProductsByCategoryAndPrice(search);
 
 			if (products == null) return NotFound();
