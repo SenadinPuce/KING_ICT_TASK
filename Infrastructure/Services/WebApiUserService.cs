@@ -7,14 +7,10 @@ using Newtonsoft.Json.Linq;
 
 namespace Infrastructure.Services
 {
-	public class WebApiUserService : WebApiReadService<User, UserDto, BaseSearchObject>, IUserService
+	public class WebApiUserService(HttpClient httpClient, IMapper mapper, ITokenService tokenService) 
+		: WebApiReadService<User, UserDto, BaseSearchObject>(httpClient, mapper, endpoint: "users"), IUserService
 	{
-		private readonly ITokenService _tokenService;
-
-		public WebApiUserService(HttpClient httpClient, IMapper mapper, ITokenService tokenService) : base(httpClient, mapper, endpoint: "users")
-		{
-			_tokenService = tokenService;
-		}
+		private readonly ITokenService _tokenService = tokenService;
 
 		public async Task<UserDto?> LoginAsync(LoginDto login)
 		{

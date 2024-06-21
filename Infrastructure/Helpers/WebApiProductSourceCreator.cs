@@ -4,16 +4,11 @@ using Infrastructure.Services;
 
 namespace Infrastructure.Helpers
 {
-	public class WebApiProductSourceCreator : ProductSourceCreator
+	public class WebApiProductSourceCreator(HttpClient httpClient, IMapper mapper) : ProductSourceCreator
 	{
-		private readonly HttpClient _httpClient;
-		private readonly IMapper _mapper;
+		private readonly HttpClient _httpClient = httpClient;
+		private readonly IMapper _mapper = mapper;
 
-		public WebApiProductSourceCreator(HttpClient httpClient, IMapper mapper)
-		{
-			_httpClient = httpClient;
-			_mapper = mapper;
-		}
 		public override IProductService Create()
 		{
 			return new WebApiProductService(_httpClient, _mapper);
