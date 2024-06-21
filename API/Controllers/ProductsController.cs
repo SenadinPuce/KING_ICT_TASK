@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using API.Helpers;
+using AutoMapper;
 using Domain.DTOs;
 using Domain.Interfaces;
 using Domain.SearchObjects;
@@ -9,8 +10,7 @@ namespace API.Controllers
 {
 	public class ProductsController : BaseApiController
 	{
-		private const string V = "{name}";
-
+	
 		IProductService _productService;
 
 		public ProductsController(HttpClient httpClient, IMapper mapper)
@@ -19,7 +19,7 @@ namespace API.Controllers
 			_productService = creator.Create();
 		}
 
-
+		[Cached(600)]
 		[HttpGet("{id}")]
 		public async Task<ActionResult<ProductDto>> GetById(int id)
 		{
@@ -31,6 +31,7 @@ namespace API.Controllers
 			return Ok(product);
 		}
 
+		[Cached(600)]
 		[HttpGet]
 		public async Task<ActionResult<PagedResult<ProductDto>>> Get([FromQuery] BaseSearchObject search)
 		{
@@ -41,6 +42,7 @@ namespace API.Controllers
 			return Ok(products);
 		}
 
+		[Cached(600)]
 		[HttpGet("search")]
 		public async Task<ActionResult<PagedResult<ProductDto>>> GetByName([FromQuery] ProductNameSearchObject search)
 		{
@@ -51,7 +53,7 @@ namespace API.Controllers
 			return Ok(products);
 		}
 
-
+		[Cached(600)]
 		[HttpGet("category")]
 		public async Task<ActionResult<PagedResult<ProductDto>>> GetByCategory([FromQuery] ProductCategoryAndPriceSearchObject search)
 		{
