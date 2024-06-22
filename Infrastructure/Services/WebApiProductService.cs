@@ -111,6 +111,5 @@ namespace Infrastructure.Services
 
 			return items != null ? new PagedResult<Product> { Items = items, Total = total, Skip = skip, Limit = limit } : null;
 		}
-
 	}
 }

@@ -22,7 +22,7 @@ namespace Infrastructure.Services
 			_endpoint = endpoint;
 		}
 
-		public async Task<TDto?> GetByIdAsync(int id)
+		public virtual async Task<TDto?> GetByIdAsync(int id)
 		{
 			var response = await _httpClient.GetAsync($"{_baseUrl}{_endpoint}/{id}");
 
@@ -37,9 +37,13 @@ namespace Infrastructure.Services
 			return _mapper.Map<TDto>(entity);
 		}
 
-		public async Task<PagedResult<TDto>?> GetListAsync(TSearch search)
+		public virtual async Task<PagedResult<TDto>?> GetListAsync(TSearch? search)
 		{
-			var paginationParams = BuildPaginationParameters(search);
+			string paginationParams;
+			if (search != null)
+				paginationParams = BuildPaginationParameters(search);
+			else paginationParams = string.Empty;
+
 			var apiUrl = $"{_baseUrl}{_endpoint}{paginationParams}";
 
 			var response = await _httpClient.GetAsync(apiUrl);

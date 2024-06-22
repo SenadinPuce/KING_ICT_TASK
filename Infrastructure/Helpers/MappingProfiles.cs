@@ -13,6 +13,8 @@ namespace Infrastructure.Helpers
 				opt.MapFrom(src => src.Description != null && src.Description.Length > 100
 				? src.Description.Substring(0, 100)
 				: src.Description));
+			CreateMap<User, UserDto>();
+			CreateMap<Category, CategoryDto>();
 		}
 	}
 }

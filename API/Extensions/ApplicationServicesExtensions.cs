@@ -12,6 +12,7 @@ namespace API.Extensions
 			services.AddHttpClient();
 			services.AddScoped<IProductService, WebApiProductService>();
 			services.AddScoped<IUserService, WebApiUserService>();
+			services.AddScoped<ICategoryService, WebApiCategoryService>();
 			services.AddScoped<ITokenService, TokenService>();
 			services.AddSingleton<IResponseCacheService, ResponseCacheService>();
 			services.AddSingleton<IConnectionMultiplexer>(c =>

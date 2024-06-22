@@ -12,7 +12,7 @@ namespace Infrastructure.Services
 	{
 		private readonly ITokenService _tokenService = tokenService;
 
-		public async Task<UserDto?> LoginAsync(LoginDto login)
+		public async Task<AuthResponse?> LoginAsync(LoginDto login)
 		{
 			var apiUrl = $"{_baseUrl}{_endpoint}?limit=0";
 
@@ -34,7 +34,7 @@ namespace Infrastructure.Services
 			if (!isPasswordCorrect) return null;
 
 
-			return new UserDto
+			return new AuthResponse
 			{
 				Email = user.Email,
 				Username = user.Username,

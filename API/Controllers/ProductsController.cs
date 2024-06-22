@@ -24,7 +24,7 @@ namespace API.Controllers
 		/// Gets a product by its ID.
 		/// </summary>
 		/// <remarks>
-		/// Access: Only accessible by users with the 'admin' role.
+		/// Access: Only accessible by authenticated users.
 		/// </remarks>
 		/// <param name="id">The ID of the product.</param>
 		/// <returns>A product DTO.</returns>
@@ -33,11 +33,10 @@ namespace API.Controllers
 		/// <response code="403">If the user is forbidden</response>
 		/// <response code="404">If the product is not found</response>
 		[Cached(600)]
-		[Authorize(Policy = "Admin")] 
+		[Authorize] 
 		[HttpGet("{id}")]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status401Unauthorized)]
-		[ProducesResponseType(StatusCodes.Status403Forbidden)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
 		public async Task<ActionResult<ProductDto>> GetById(int id)
 		{
@@ -82,7 +81,7 @@ namespace API.Controllers
 		/// Searches products by name.
 		/// </summary>
 		/// <remarks>
-		/// Access: Accessible by all users.
+		/// Access: Accessible by all users, including anonymous users.
 		/// </remarks>
 		/// <param name="search">The search parameters.</param>
 		/// <returns>A list of products.</returns>
