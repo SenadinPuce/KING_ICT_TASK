@@ -9,22 +9,10 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
-	public class ProductsController : BaseApiController
+	public class ProductsController(IProductService productService) : BaseApiController
 	{
-	
-		IProductService _productService;
 
-		// Constructor for testing purposes
-		public ProductsController(IProductService productService)
-		{
-			_productService = productService;
-		}
-
-		public ProductsController(HttpClient httpClient, IMapper mapper)
-		{
-			ProductSourceCreator creator = new WebApiProductSourceCreator(httpClient, mapper);
-			_productService = creator.Create();
-		}
+		private readonly IProductService _productService = productService;
 
 		/// <summary>
 		/// Gets a product by its ID.
