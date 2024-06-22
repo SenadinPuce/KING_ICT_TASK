@@ -14,6 +14,12 @@ namespace API.Controllers
 	
 		IProductService _productService;
 
+		// Constructor for testing purposes
+		public ProductsController(IProductService productService)
+		{
+			_productService = productService;
+		}
+
 		public ProductsController(HttpClient httpClient, IMapper mapper)
 		{
 			ProductSourceCreator creator = new WebApiProductSourceCreator(httpClient, mapper);

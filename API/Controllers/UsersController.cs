@@ -19,18 +19,18 @@ namespace API.Controllers
 		/// </remarks>
 		/// <param name="login">The login credentials (username and password).</param>
 		/// <returns>A UserDto containing the username, email, and JWT token.</returns>
-		/// <response code="200">Returns the UserDto with the username, email, and token</response>
+		/// <response code="200">Returns the AuthResponse with the username, email, and token</response>
 		/// <response code="401">If the login credentials are invalid</response>
 		[HttpPost("login")]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status401Unauthorized)]
-		public async Task<ActionResult<UserDto>> Login(LoginDto login)
+		public async Task<ActionResult<AuthResponse>> Login(LoginDto login)
 		{
-			var userDto = await _userService.LoginAsync(login);
+			var authResponse = await _userService.LoginAsync(login);
 
-			if (userDto == null) return Unauthorized();
+			if (authResponse == null) return Unauthorized();
 
-			return Ok(userDto);
+			return Ok(authResponse);
 		}
 
 
@@ -53,7 +53,7 @@ namespace API.Controllers
 		[ProducesResponseType(StatusCodes.Status401Unauthorized)]
 		[ProducesResponseType(StatusCodes.Status403Forbidden)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
-		public async Task<ActionResult<PagedResult<AuthResponse>>> Get([FromQuery] BaseSearchObject search)
+		public async Task<ActionResult<PagedResult<UserDto>>> Get([FromQuery] BaseSearchObject search)
 		{
 			var users = await _userService.GetListAsync(search);
 
